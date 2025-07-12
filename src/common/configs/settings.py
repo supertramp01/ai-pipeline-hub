@@ -12,6 +12,9 @@ class Settings:
     # Tavily settings
     tavily_api_key = os.getenv("TAVILY_API_KEY")
     
+    # OpenAI settings
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    
     # Data storage settings
     data_dir = "data"
     linkedin_profiles_dir = os.path.join(data_dir, "lin_profiles")
