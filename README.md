@@ -1,20 +1,23 @@
 # AI Pipeline Hub - Meeting Preparation API
 
-A REST API application for meeting preparation that scrapes LinkedIn profiles using Apify, researches company websites using Tavily API, and generates intelligent company summaries.
+A REST API application for meeting preparation that scrapes LinkedIn profiles using Apify, researches company websites using Tavily API, generates intelligent company summaries, and orchestrates meetings with AI-powered talking points.
 
 ## Features
 
 - **LinkedIn Profile Scraping**: Uses Apify to scrape LinkedIn profiles with comprehensive data extraction
 - **Company Research**: Uses Tavily API to research company websites and extract comprehensive information
 - **Company Summaries**: Generates intelligent summaries with optional user prompts and bullet points
-- **Data Storage**: Stores profile, company research, and summary data in markdown format with JSON backup
+- **Meeting Orchestration**: Creates meetings with AI-generated talking points based on participant objectives and offerings
+- **Data Storage**: Stores profile, company research, summary, and meeting data in markdown format with JSON backup
 - **User Management**: Tracks users in CSV format with auto-incrementing IDs
 - **Company Management**: Tracks companies in CSV format with UUID-based IDs
-- **REST API**: FastAPI-based endpoints for scraping profiles, researching companies, and generating summaries
+- **Meeting Management**: Tracks meetings in CSV format with UUID-based IDs
+- **REST API**: FastAPI-based endpoints for scraping profiles, researching companies, generating summaries, and creating meetings
 - **Profile Summaries**: Structured summaries with counts and basic information
 - **Comprehensive Field Extraction**: Extracts all possible LinkedIn profile fields
 - **Advanced Company Research**: Comprehensive company analysis with multiple data sources
 - **Intelligent Summarization**: AI-powered summaries with user prompt customization
+- **AI-Powered Meeting Preparation**: Generates personalized talking points for each participant
 - **Logging**: Comprehensive logging throughout the application
 
 ## Project Structure
@@ -35,24 +38,34 @@ ai-pipeline-hub/
 │       │   ├── tavily_client.py # Tavily API client
 │       │   ├── csv_manager.py  # LinkedIn CSV data management
 │       │   ├── company_csv_manager.py # Company CSV data management
+│       │   ├── meeting_csv_manager.py # Meeting CSV data management
 │       │   ├── file_manager.py # LinkedIn file storage management
 │       │   ├── company_file_manager.py # Company file storage management
+│       │   ├── meeting_file_manager.py # Meeting file storage management
 │       │   └── logger.py       # Logging utilities
 │       ├── services/
 │       │   ├── __init__.py
 │       │   ├── linkedin_service.py # LinkedIn service orchestration
 │       │   ├── company_service.py # Company service orchestration
-│       │   └── company_summary_service.py # Company summary service
-│       └── __init__.py
+│       │   ├── company_summary_service.py # Company summary service
+│       │   └── meeting_service.py # Meeting service orchestration
+│       └── prompts/
+│           ├── __init__.py
+│           ├── company_summary.py # Company summary prompts
+│           └── meeting_preparation.py # Meeting preparation prompts
 ├── data/
 │   ├── lin_profiles/           # LinkedIn profile data storage
-│   └── company_info/           # Company research and summary data storage
+│   ├── company_info/           # Company research and summary data storage
+│   └── meetings/               # Meeting data storage
+├── examples/
+│   └── meeting_example.py      # Meeting preparation example
 ├── tests/
 │   ├── test_api_endpoints.py   # API endpoint tests
 │   ├── test_functions_directly.py # Direct function tests
 │   ├── test_comprehensive_data.py # Comprehensive data test
 │   ├── test_company_research.py # Company research tests
-│   └── test_company_summary.py # Company summary tests
+│   ├── test_company_summary.py # Company summary tests
+│   └── test_meeting_service.py # Meeting service tests
 ├── .env                        # Environment variables
 ├── requirements.txt            # Python dependencies
 └── README.md                   # This file
@@ -155,6 +168,56 @@ The API will be available at `http://localhost:8000`
 ### 14. Get Company Summary by Website
 - **GET** `/api/v1/company/summary/website/{website_url}`
 - Retrieves previously generated company summary by website URL
+
+### Meeting Preparation Endpoints
+
+### 15. Create Meeting
+- **POST** `/api/v1/meeting/create`
+- **Body**: 
+```json
+{
+  "meeting_title": "AI Partnership Meeting",
+  "meeting_date": "2024-02-15",
+  "participants": [
+    {
+      "name": "John Doe",
+      "company": "Tech Corp",
+      "user_id": 1,
+      "company_id": "tech-corp-123",
+      "linkedin_url": "https://linkedin.com/in/johndoe",
+      "background": "Software engineer with 10 years experience",
+      "what_they_offer": "AI/ML expertise, technical consulting, development resources",
+      "meeting_objective": "Find potential partners for AI project",
+      "looking_for": "Companies working on AI/ML solutions, funding opportunities"
+    }
+  ]
+}
+```
+- Creates a new meeting with AI-generated talking points for each participant
+- Enriches participant data with LinkedIn and company information using user_id and company_id
+- Generates personalized talking points based on mutual objectives and offerings
+- Stores meeting data in JSON and markdown formats
+- Returns meeting ID, status, and participant count
+
+**Participant Fields:**
+- `name` (required): Participant's name
+- `company` (required): Company name
+- `user_id` (optional): LinkedIn user ID for data enrichment
+- `company_id` (optional): Company ID for data enrichment
+- `linkedin_url` (optional): LinkedIn URL (used if user_id not provided)
+- `background` (optional): Professional background
+- `what_they_offer` (optional): Skills, resources, and expertise they can offer
+- `meeting_objective` (required): What they want to achieve in the meeting
+- `looking_for` (optional): What they need from other participants
+
+### 16. Get Meeting
+- **GET** `/api/v1/meeting/{meeting_id}`
+- Retrieves meeting information including participant data and talking points
+- Returns comprehensive meeting data with CSV metadata
+
+### 17. List All Meetings
+- **GET** `/api/v1/meeting/list`
+- Returns a list of all stored meetings with metadata
 
 ## Comprehensive LinkedIn Data Extraction
 
@@ -389,6 +452,52 @@ curl "http://localhost:8000/api/v1/company/summary/{company_id}"
 curl "http://localhost:8000/api/v1/company/summary/website/https%3A//www.apple.com"
 ```
 
+### Create a Meeting
+
+```bash
+curl -X POST "http://localhost:8000/api/v1/meeting/create" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "meeting_title": "AI Partnership Meeting",
+       "meeting_date": "2024-02-15",
+       "participants": [
+         {
+           "name": "Sarah Johnson",
+           "company": "TechStart AI",
+           "user_id": 1,
+           "company_id": "techstart-ai-789",
+           "linkedin_url": "https://linkedin.com/in/sarahjohnson",
+           "background": "AI researcher with 8 years experience",
+           "what_they_offer": "AI/ML expertise, research capabilities, technical consulting",
+           "meeting_objective": "Find partners for AI healthcare solutions",
+           "looking_for": "Healthcare domain expertise, clinical data access, funding"
+         },
+         {
+           "name": "Dr. Michael Chen",
+           "company": "HealthTech Solutions",
+           "user_id": 2,
+           "company_id": "healthtech-solutions-456",
+           "background": "Medical doctor turned healthcare technology entrepreneur",
+           "what_they_offer": "Healthcare domain expertise, clinical validation, regulatory knowledge",
+           "meeting_objective": "Identify AI solutions to improve patient outcomes",
+           "looking_for": "AI/ML technical expertise, data science capabilities"
+         }
+       ]
+     }'
+```
+
+### Get Meeting Details
+
+```bash
+curl "http://localhost:8000/api/v1/meeting/{meeting_id}"
+```
+
+### List All Meetings
+
+```bash
+curl "http://localhost:8000/api/v1/meeting/list"
+```
+
 ## Testing
 
 ### Test API Endpoints
@@ -451,6 +560,21 @@ Each company gets a directory containing:
 - `summary.md`: Generated company summary in markdown format
 - `summary.json`: Generated company summary in JSON format
 
+### Meeting CSV File (`data/meetings/`)
+Stores meeting information with the following columns:
+- `meeting_id`: UUID-based meeting identifier
+- `meeting_title`: Meeting title
+- `meeting_date`: Meeting date
+- `created_date`: When the entry was created
+- `last_updated`: When the entry was last updated
+
+### Meeting Data (`data/meetings/{meeting_id}/`)
+Each meeting gets a directory containing:
+- `participants.md`: Participant data in markdown format
+- `participants.json`: Raw participant data in JSON format
+- `talking_points.md`: AI-generated talking points in markdown format
+- `talking_points.json`: Raw talking points in JSON format
+
 ## Pipeline Flow
 
 ### LinkedIn Profile Pipeline
@@ -480,6 +604,21 @@ Each company gets a directory containing:
    - Saves summary data in markdown and JSON formats
    - Stores in company-specific directory
 6. **Response**: Returns summary data and metadata
+
+### Meeting Preparation Pipeline
+1. **Input**: Meeting title, date, and participant information via POST request
+2. **Participant Processing**: 
+   - Enriches participant data with LinkedIn profile information using user_id (preferred) or linkedin_url
+   - Incorporates company research data using company_id (preferred) or company name
+   - Combines user-provided and LinkedIn background information
+3. **Talking Points Generation**: 
+   - Analyzes each participant's objectives, offerings, and needs
+   - Generates personalized talking points for each participant
+   - Uses AI to identify mutual value and collaboration opportunities
+4. **Data Storage**: 
+   - Creates entry in meeting CSV file with UUID
+   - Saves comprehensive meeting data in JSON and markdown formats
+5. **Response**: Returns meeting ID, status, and participant count
 
 ## Error Handling
 
