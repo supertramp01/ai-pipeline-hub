@@ -2,16 +2,17 @@ import requests
 import json
 import time
 from typing import Dict, Optional
-from src.common.configs.settings import settings
-from src.common.utils.logger import setup_logger
+from ..configs.settings import get_settings
+from .logger import setup_logger
 from apify_client import ApifyClient as OfficialApifyClient
 
 logger = setup_logger(__name__)
 
 class ApifyClient:
     def __init__(self):
-        self.api_token = settings.APIFY_API_TOKEN
-        self.actor_id = settings.APIFY_ACTOR_ID
+        settings = get_settings()
+        self.api_token = settings.apify_api_token
+        self.actor_id = settings.apify_actor_id
         
         if not self.actor_id or not self.api_token:
             raise ValueError("APIFY_ACTOR_ID and APIFY_API_TOKEN must be set in environment variables")

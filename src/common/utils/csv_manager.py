@@ -2,14 +2,15 @@ import csv
 import os
 from datetime import datetime
 from typing import Dict, Optional, List
-from src.common.configs.settings import settings
-from src.common.utils.logger import setup_logger
+from ..configs.settings import get_settings
+from .logger import setup_logger
 
 logger = setup_logger(__name__)
 
 class CSVManager:
     def __init__(self):
-        self.csv_file = settings.USER_PROFILES_CSV
+        settings = get_settings()
+        self.csv_file = settings.user_profiles_csv
         self._ensure_csv_exists()
     
     def _ensure_csv_exists(self):
