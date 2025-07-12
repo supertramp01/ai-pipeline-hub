@@ -12,6 +12,7 @@ from src.common.configs.settings import get_settings
 from src.common.services.linkedin_service import LinkedInService
 from src.common.services.company_service import CompanyService
 from src.common.services.company_summary_service import CompanySummaryService
+from src.common.services.meeting_service import MeetingService
 from src.common.utils.logger import setup_logger
 
 # Set up logging
@@ -29,6 +30,7 @@ app = FastAPI(
 linkedin_service = LinkedInService()
 company_service = CompanyService()
 company_summary_service = CompanySummaryService()
+meeting_service = MeetingService()
 
 # Pydantic models
 class LinkedInProfileRequest(BaseModel):
@@ -42,6 +44,29 @@ class CompanySummaryRequest(BaseModel):
     company_id: Optional[str] = None
     company_website: Optional[str] = None
     user_prompt: Optional[str] = None
+
+class ParticipantRequest(BaseModel):
+    name: str
+    company: str
+    user_id: Optional[int] = None
+    company_id: Optional[str] = None
+    linkedin_url: Optional[str] = None
+    background: Optional[str] = None
+    meeting_objective: str
+    looking_for: Optional[str] = None
+    what_they_offer: Optional[str] = None
+
+class MeetingRequest(BaseModel):
+    meeting_title: str
+    meeting_date: str
+    participants: List[ParticipantRequest]
+
+class MeetingResponse(BaseModel):
+    meeting_id: str
+    status: str
+    message: str
+    participant_count: int
+    meeting_data: Dict[str, Any]
 
 class BasicInfo(BaseModel):
     name: str
@@ -96,6 +121,14 @@ class CompanyProfile(BaseModel):
     create_date: str
     last_updated: str
 
+class MeetingProfile(BaseModel):
+    meeting_id: str
+    meeting_title: str
+    meeting_date: str
+    participant_count: int
+    created_date: str
+    last_updated: str
+
 @app.get("/")
 async def root():
     """Root endpoint with API information."""
@@ -120,6 +153,11 @@ async def root():
                 "generate_summary": "POST /api/v1/company/summary/generate",
                 "get_summary": "GET /api/v1/company/summary/{company_id}",
                 "get_summary_by_website": "GET /api/v1/company/summary/website/{website_url}"
+            },
+            "meeting": {
+                "create_meeting": "POST /api/v1/meeting/create",
+                "get_meeting": "GET /api/v1/meeting/{meeting_id}",
+                "list_meetings": "GET /api/v1/meeting/list"
             }
         }
     }
@@ -426,6 +464,77 @@ async def get_company_summary_by_website(website_url: str):
         raise
     except Exception as e:
         logger.error(f"Unexpected error in get company summary by website endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+# Meeting Endpoints
+@app.post("/api/v1/meeting/create", response_model=MeetingResponse)
+async def create_meeting(request: MeetingRequest):
+    """
+    Create a new meeting.
+    
+    This endpoint:
+    1. Takes a meeting title, date, and list of participants
+    2. Stores the meeting data in JSON and markdown formats
+    3. Returns the meeting ID and metadata
+    """
+    try:
+        logger.info(f"Received meeting creation request for: {request.meeting_title}")
+        
+        # Convert Pydantic models to dictionaries
+        participants = [participant.dict() for participant in request.participants]
+        
+        result = meeting_service.create_meeting(request.meeting_title, request.meeting_date, participants)
+        
+        if result['status'] == 'error':
+            raise HTTPException(status_code=500, detail=result['message'])
+        
+        return MeetingResponse(**result)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error in meeting creation endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/api/v1/meeting/{meeting_id}", response_model=MeetingProfile)
+async def get_meeting(meeting_id: str):
+    """
+    Get a specific meeting by its ID.
+    
+    Returns the meeting data including metadata.
+    """
+    try:
+        logger.info(f"Received meeting retrieval request for: {meeting_id}")
+        
+        meeting_data = meeting_service.get_meeting(meeting_id)
+        
+        if meeting_data is None:
+            raise HTTPException(status_code=404, detail="Meeting not found")
+        
+        return MeetingProfile(**meeting_data)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error in get meeting endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/api/v1/meeting/list", response_model=List[MeetingProfile])
+async def list_meetings():
+    """
+    Get all meetings from the CSV file.
+    
+    Returns a list of all stored meeting profiles.
+    """
+    try:
+        logger.info("Received meeting list request")
+        
+        meetings = meeting_service.get_all_meetings()
+        
+        return [MeetingProfile(**meeting) for meeting in meetings]
+        
+    except Exception as e:
+        logger.error(f"Unexpected error in list meetings endpoint: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/health")
