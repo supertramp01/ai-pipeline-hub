@@ -2,7 +2,7 @@ import sys
 import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, HttpUrl
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Any
 import uvicorn
 
 # Ensure src is in sys.path for local runs
@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from src.common.configs.settings import get_settings
 from src.common.services.linkedin_service import LinkedInService
 from src.common.services.company_service import CompanyService
+from src.common.services.company_summary_service import CompanySummaryService
 from src.common.utils.logger import setup_logger
 
 # Set up logging
@@ -27,6 +28,7 @@ app = FastAPI(
 # Initialize services
 linkedin_service = LinkedInService()
 company_service = CompanyService()
+company_summary_service = CompanySummaryService()
 
 # Pydantic models
 class LinkedInProfileRequest(BaseModel):
@@ -35,6 +37,11 @@ class LinkedInProfileRequest(BaseModel):
 class CompanyResearchRequest(BaseModel):
     website_url: HttpUrl
     company_name: Optional[str] = None
+
+class CompanySummaryRequest(BaseModel):
+    company_id: Optional[str] = None
+    company_website: Optional[str] = None
+    user_prompt: Optional[str] = None
 
 class BasicInfo(BaseModel):
     name: str
@@ -65,6 +72,12 @@ class CompanyResearchResponse(BaseModel):
     company_website: str
     status: str  # 'created' or 'updated'
     message: str
+
+class CompanySummaryResponse(BaseModel):
+    company_id: str
+    status: str
+    message: str
+    summary: Dict[str, Any]
 
 class ErrorResponse(BaseModel):
     error: str
@@ -102,6 +115,11 @@ async def root():
                 "get_company_json": "GET /api/v1/company/{company_id}/json",
                 "get_company_markdown": "GET /api/v1/company/{company_id}/markdown",
                 "list_companies": "GET /api/v1/company/list"
+            },
+            "company_summary": {
+                "generate_summary": "POST /api/v1/company/summary/generate",
+                "get_summary": "GET /api/v1/company/summary/{company_id}",
+                "get_summary_by_website": "GET /api/v1/company/summary/website/{website_url}"
             }
         }
     }
@@ -324,6 +342,90 @@ async def list_companies():
         
     except Exception as e:
         logger.error(f"Unexpected error in list companies endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+# Company Summary Endpoints
+@app.post("/api/v1/company/summary/generate", response_model=CompanySummaryResponse)
+async def generate_company_summary(request: CompanySummaryRequest):
+    """
+    Generate a summary for a company based on its research data.
+    
+    This endpoint:
+    1. Takes a company ID or website URL and optional user prompt
+    2. Uses the company summary service to generate the summary
+    3. Stores the summary in JSON and markdown formats
+    4. Returns the generated summary and metadata
+    """
+    try:
+        logger.info(f"Received company summary generation request for: {request.company_id or request.company_website}")
+        
+        result = company_summary_service.generate_summary(
+            company_id=request.company_id,
+            company_website=request.company_website,
+            user_prompt=request.user_prompt
+        )
+        
+        if result['status'] == 'error':
+            raise HTTPException(status_code=500, detail=result['message'])
+        
+        return CompanySummaryResponse(**result)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error in company summary generation endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/api/v1/company/summary/{company_id}")
+async def get_company_summary(company_id: str):
+    """
+    Get a previously generated summary for a specific company.
+    
+    Returns the summary data.
+    """
+    try:
+        logger.info(f"Received company summary retrieval request for: {company_id}")
+        
+        summary_data = company_summary_service.get_summary(company_id=company_id)
+        
+        if summary_data is None:
+            raise HTTPException(status_code=404, detail="Company summary not found")
+        
+        return {
+            "company_id": company_id,
+            "summary": summary_data
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error in get company summary endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/api/v1/company/summary/website/{website_url}")
+async def get_company_summary_by_website(website_url: str):
+    """
+    Get a previously generated summary for a company based on its website URL.
+    
+    Returns the summary data.
+    """
+    try:
+        logger.info(f"Received company summary retrieval by website request for: {website_url}")
+        
+        summary_data = company_summary_service.get_summary(company_website=website_url)
+        
+        if summary_data is None:
+            raise HTTPException(status_code=404, detail="Company summary not found")
+        
+        return {
+            "website_url": website_url,
+            "summary": summary_data
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error in get company summary by website endpoint: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/health")
