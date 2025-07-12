@@ -6,22 +6,32 @@ load_dotenv()
 
 class Settings:
     # Apify settings
-    APIFY_ACTOR_ID = os.getenv("APIFY_ACTOR_ID")
-    APIFY_API_TOKEN = os.getenv("APIFY_API_TOKEN")
+    apify_actor_id = os.getenv("APIFY_ACTOR_ID")
+    apify_api_token = os.getenv("APIFY_API_TOKEN")
+    
+    # Tavily settings
+    tavily_api_key = os.getenv("TAVILY_API_KEY")
     
     # Data storage settings
-    DATA_DIR = "data"
-    LINKEDIN_PROFILES_DIR = os.path.join(DATA_DIR, "lin_profiles")
-    USER_PROFILES_CSV = os.path.join(DATA_DIR, "user_profiles.csv")
+    data_dir = "data"
+    linkedin_profiles_dir = os.path.join(data_dir, "lin_profiles")
+    company_data_dir = os.path.join(data_dir, "company_info")
+    user_profiles_csv = os.path.join(data_dir, "user_profiles.csv")
+    company_csv_file = os.path.join(data_dir, "company_profiles.csv")
     
     # API settings
-    API_HOST = "0.0.0.0"
-    API_PORT = 8000
-    API_TITLE = "AI Pipeline Hub - Meeting Preparation API"
-    API_VERSION = "1.0.0"
+    api_host = "0.0.0.0"
+    api_port = 8000
+    api_title = "AI Pipeline Hub - Meeting Preparation API"
+    api_version = "1.0.0"
     
     # Logging settings
-    LOG_LEVEL = "INFO"
-    LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    log_level = "INFO"
+    log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
+def get_settings() -> Settings:
+    """Get settings instance."""
+    return Settings()
+
+# Backward compatibility
 settings = Settings() 

@@ -1,14 +1,15 @@
 import os
 import json
 from typing import Optional, Dict, List, Any
-from src.common.configs.settings import settings
-from src.common.utils.logger import setup_logger
+from ..configs.settings import get_settings
+from .logger import setup_logger
 
 logger = setup_logger(__name__)
 
 class FileManager:
     def __init__(self):
-        self.base_dir = settings.LINKEDIN_PROFILES_DIR
+        settings = get_settings()
+        self.base_dir = settings.linkedin_profiles_dir
         self._ensure_base_dir()
     
     def _ensure_base_dir(self):

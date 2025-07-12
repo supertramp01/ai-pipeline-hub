@@ -1,0 +1,7 @@
+company_id,company_website,create_date,last_updated
+test-company-123,https://www.testcompany.com,2025-07-11T23:04:09.115546,2025-07-11T23:23:24.189883
+aef70321-283a-48c3-9b74-2630470a6cfc,https://www.microsoft.com,2025-07-11T23:04:11.216943,2025-07-11T23:23:25.850543
+d8d0578a-f056-47ae-97b8-377ed476a6b5,https://emergence.ai/,2025-07-11T23:17:23.626082,2025-07-11T23:17:23.626082
+test-company-123,https://www.testcompany.com,2025-07-11T23:22:31.553144,2025-07-11T23:23:24.189899
+bbd58d0b-9ae8-4414-bd11-d21fc7cfdc3b,https://www.apple.com/,2025-07-11T23:22:36.688402,2025-07-11T23:23:27.665301
+test-company-123,https://www.testcompany.com,2025-07-11T23:23:24.188547,2025-07-11T23:23:24.189904

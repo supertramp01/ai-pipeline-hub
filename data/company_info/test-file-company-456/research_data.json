@@ -1,0 +1,23 @@
+{
+  "answer": "This is a test company research answer.",
+  "results": [
+    {
+      "title": "Test Result 1",
+      "url": "https://example.com/1",
+      "content": "This is test content for result 1."
+    },
+    {
+      "title": "Test Result 2",
+      "url": "https://example.com/2",
+      "content": "This is test content for result 2."
+    }
+  ],
+  "raw_content": [
+    {
+      "title": "Raw Content 1",
+      "url": "https://example.com/raw1",
+      "content": "Raw content for testing."
+    }
+  ],
+  "search_timestamp": "2025-07-11T23:23:24.190224"
+}
