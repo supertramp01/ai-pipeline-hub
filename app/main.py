@@ -13,6 +13,7 @@ from src.common.services.linkedin_service import LinkedInService
 from src.common.services.company_service import CompanyService
 from src.common.services.company_summary_service import CompanySummaryService
 from src.common.services.meeting_service import MeetingService
+from src.common.services.linkedin_insights_service import LinkedInInsightsService
 from src.common.utils.logger import setup_logger
 
 # Set up logging
@@ -31,10 +32,12 @@ linkedin_service = LinkedInService()
 company_service = CompanyService()
 company_summary_service = CompanySummaryService()
 meeting_service = MeetingService()
+linkedin_insights_service = LinkedInInsightsService()
 
 # Pydantic models
 class LinkedInProfileRequest(BaseModel):
     linkedin_url: HttpUrl
+    return_full_object: Optional[bool] = True
 
 class CompanyResearchRequest(BaseModel):
     website_url: HttpUrl
@@ -90,6 +93,7 @@ class LinkedInProfileResponse(BaseModel):
     linkedin_url: str
     status: str
     profile_summary: ProfileSummary
+    full_profile: Optional[Dict[str, Any]] = None
 
 class CompanyResearchResponse(BaseModel):
     company_id: str
@@ -129,6 +133,16 @@ class MeetingProfile(BaseModel):
     created_date: str
     last_updated: str
 
+class LinkedInInsightsRequest(BaseModel):
+    user_id: int
+    custom_prompt: Optional[str] = None
+
+class LinkedInInsightsResponse(BaseModel):
+    user_id: int
+    status: str
+    message: str
+    insights: Dict[str, Any]
+
 @app.get("/")
 async def root():
     """Root endpoint with API information."""
@@ -141,6 +155,12 @@ async def root():
                 "get_profile": "GET /api/v1/linkedin/profile/{user_id}",
                 "get_profile_summary": "GET /api/v1/linkedin/profile/{user_id}/summary",
                 "list_users": "GET /api/v1/linkedin/users"
+            },
+            "linkedin_insights": {
+                "generate_insights": "POST /api/v1/linkedin/insights/generate",
+                "get_insights": "GET /api/v1/linkedin/insights/{user_id}?auto_generate=true",
+                "get_insights_markdown": "GET /api/v1/linkedin/insights/{user_id}/markdown?auto_generate=true",
+                "list_all_insights": "GET /api/v1/linkedin/insights/list"
             },
             "company": {
                 "research_company": "POST /api/v1/company/research",
@@ -157,6 +177,7 @@ async def root():
             "meeting": {
                 "create_meeting": "POST /api/v1/meeting/create",
                 "get_meeting": "GET /api/v1/meeting/{meeting_id}",
+                "get_meeting_metadata": "GET /api/v1/meeting/{meeting_id}/metadata",
                 "list_meetings": "GET /api/v1/meeting/list"
             }
         }
@@ -174,11 +195,15 @@ async def scrape_linkedin_profile(request: LinkedInProfileRequest):
     3. Stores the data in markdown format
     4. Updates or creates user entry in CSV
     5. Returns comprehensive profile information
+    6. Optionally returns the full profile object
     """
     try:
         logger.info(f"Received LinkedIn profile scrape request for: {request.linkedin_url}")
         
-        success, response_data = linkedin_service.scrape_and_store_profile(str(request.linkedin_url))
+        success, response_data = linkedin_service.scrape_and_store_profile(
+            str(request.linkedin_url), 
+            return_full_object=request.return_full_object
+        )
         
         if not success:
             raise HTTPException(status_code=500, detail=response_data.get("error", "Unknown error"))
@@ -496,12 +521,12 @@ async def create_meeting(request: MeetingRequest):
         logger.error(f"Unexpected error in meeting creation endpoint: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
-@app.get("/api/v1/meeting/{meeting_id}", response_model=MeetingProfile)
+@app.get("/api/v1/meeting/{meeting_id}")
 async def get_meeting(meeting_id: str):
     """
     Get a specific meeting by its ID.
     
-    Returns the meeting data including metadata.
+    Returns the meeting data including metadata and participants.
     """
     try:
         logger.info(f"Received meeting retrieval request for: {meeting_id}")
@@ -511,12 +536,45 @@ async def get_meeting(meeting_id: str):
         if meeting_data is None:
             raise HTTPException(status_code=404, detail="Meeting not found")
         
-        return MeetingProfile(**meeting_data)
+        return meeting_data
         
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Unexpected error in get meeting endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/api/v1/meeting/{meeting_id}/metadata", response_model=MeetingProfile)
+async def get_meeting_metadata(meeting_id: str):
+    """
+    Get meeting metadata by its ID.
+    
+    Returns the meeting metadata without participant details.
+    """
+    try:
+        logger.info(f"Received meeting metadata request for: {meeting_id}")
+        
+        meeting_data = meeting_service.get_meeting(meeting_id)
+        
+        if meeting_data is None:
+            raise HTTPException(status_code=404, detail="Meeting not found")
+        
+        # Extract only the metadata fields for MeetingProfile
+        metadata = {
+            'meeting_id': meeting_data['meeting_id'],
+            'meeting_title': meeting_data['meeting_title'],
+            'meeting_date': meeting_data['meeting_date'],
+            'participant_count': meeting_data['participant_count'],
+            'created_date': meeting_data['created_date'],
+            'last_updated': meeting_data['last_updated']
+        }
+        
+        return MeetingProfile(**metadata)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error in get meeting metadata endpoint: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/api/v1/meeting/list", response_model=List[MeetingProfile])
@@ -535,6 +593,141 @@ async def list_meetings():
         
     except Exception as e:
         logger.error(f"Unexpected error in list meetings endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+# LinkedIn Insights Endpoints
+@app.post("/api/v1/linkedin/insights/generate", response_model=LinkedInInsightsResponse)
+async def generate_linkedin_insights(request: LinkedInInsightsRequest):
+    """
+    Generate comprehensive insights from LinkedIn profile data.
+    
+    This endpoint:
+    1. Takes a user_id as input
+    2. Analyzes the stored LinkedIn profile data
+    3. Uses AI to generate insights about international experience, industry sectors, education, value proposition, interests from posts, and talking points
+    4. Stores the insights in JSON and markdown formats
+    5. Returns the generated insights
+    """
+    try:
+        logger.info(f"Received LinkedIn insights generation request for user: {request.user_id}")
+        
+        success, response_data = linkedin_insights_service.generate_insights(
+            request.user_id, 
+            request.custom_prompt
+        )
+        
+        if not success:
+            raise HTTPException(status_code=500, detail=response_data.get("error", "Unknown error"))
+        
+        return LinkedInInsightsResponse(
+            user_id=request.user_id,
+            status="success",
+            message="Insights generated successfully",
+            insights=response_data
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error in generate insights endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/api/v1/linkedin/insights/{user_id}")
+async def get_linkedin_insights(user_id: int, auto_generate: bool = True):
+    """
+    Get LinkedIn insights for a specific user.
+    
+    Args:
+        user_id: The user ID to retrieve insights for
+        auto_generate: If True (default), automatically generate insights if they don't exist
+    
+    Returns the insights data in JSON format.
+    """
+    try:
+        logger.info(f"Received insights retrieval request for user: {user_id} (auto_generate: {auto_generate})")
+        
+        insights = linkedin_insights_service.get_insights(user_id, auto_generate=auto_generate)
+        
+        if insights is None:
+            if auto_generate:
+                raise HTTPException(status_code=500, detail="Failed to generate insights")
+            else:
+                raise HTTPException(status_code=404, detail="Insights not found")
+        
+        return {
+            "user_id": user_id,
+            "insights": insights,
+            "format": "json",
+            "auto_generated": auto_generate
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error in get insights endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/api/v1/linkedin/insights/{user_id}/markdown")
+async def get_linkedin_insights_markdown(user_id: int, auto_generate: bool = True):
+    """
+    Get LinkedIn insights for a specific user in markdown format.
+    
+    Args:
+        user_id: The user ID to retrieve insights for
+        auto_generate: If True (default), automatically generate insights if they don't exist
+    
+    Returns the insights data in markdown format.
+    """
+    try:
+        logger.info(f"Received insights markdown retrieval request for user: {user_id} (auto_generate: {auto_generate})")
+        
+        # First try to get insights (with auto-generation if enabled)
+        insights = linkedin_insights_service.get_insights(user_id, auto_generate=auto_generate)
+        
+        if insights is None:
+            if auto_generate:
+                raise HTTPException(status_code=500, detail="Failed to generate insights")
+            else:
+                raise HTTPException(status_code=404, detail="Insights not found")
+        
+        # Now get the markdown content
+        insights_content = linkedin_insights_service.file_manager.get_linkedin_insights_markdown(user_id)
+        
+        if insights_content is None:
+            raise HTTPException(status_code=404, detail="Insights markdown not found")
+        
+        return {
+            "user_id": user_id,
+            "insights_content": insights_content,
+            "format": "markdown",
+            "auto_generated": auto_generate
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error in get insights markdown endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/api/v1/linkedin/insights/list")
+async def list_all_linkedin_insights():
+    """
+    Get insights for all users who have them.
+    
+    Returns a list of all stored insights with user information.
+    """
+    try:
+        logger.info("Received insights list request")
+        
+        all_insights = linkedin_insights_service.get_all_insights()
+        
+        return {
+            "total_insights": len(all_insights),
+            "insights": all_insights
+        }
+        
+    except Exception as e:
+        logger.error(f"Unexpected error in list insights endpoint: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/health")

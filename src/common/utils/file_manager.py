@@ -311,3 +311,201 @@ class FileManager:
         markdown_lines.append("```")
         
         return "\n".join(markdown_lines) 
+    
+    def save_linkedin_insights(self, user_id: int, insights_data: Dict) -> bool:
+        """
+        Save LinkedIn insights data as JSON and markdown files.
+        
+        Args:
+            user_id: The user ID to create directory for
+            insights_data: The generated insights data
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            # Create user directory if it doesn't exist
+            user_dir = os.path.join(self.base_dir, str(user_id))
+            os.makedirs(user_dir, exist_ok=True)
+            
+            # Save JSON insights
+            json_path = os.path.join(user_dir, "insights.json")
+            with open(json_path, 'w', encoding='utf-8') as file:
+                json.dump(insights_data, file, indent=2, ensure_ascii=False)
+            
+            # Convert to markdown and save
+            markdown_content = self._convert_insights_to_markdown(insights_data)
+            markdown_path = os.path.join(user_dir, "insights.md")
+            with open(markdown_path, 'w', encoding='utf-8') as file:
+                file.write(markdown_content)
+            
+            logger.info(f"Saved LinkedIn insights for user {user_id}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error saving LinkedIn insights for user {user_id}: {str(e)}")
+            return False
+    
+    def get_linkedin_insights(self, user_id: int) -> Optional[Dict]:
+        """
+        Get LinkedIn insights data as JSON.
+        
+        Args:
+            user_id: The user ID to retrieve insights for
+            
+        Returns:
+            Insights data or None if not found
+        """
+        try:
+            json_path = os.path.join(self.base_dir, str(user_id), "insights.json")
+            
+            if not os.path.exists(json_path):
+                logger.warning(f"Insights not found for user {user_id}")
+                return None
+            
+            with open(json_path, 'r', encoding='utf-8') as file:
+                insights_data = json.load(file)
+            
+            logger.info(f"Retrieved LinkedIn insights for user {user_id}")
+            return insights_data
+            
+        except Exception as e:
+            logger.error(f"Error retrieving LinkedIn insights for user {user_id}: {str(e)}")
+            return None
+    
+    def get_linkedin_insights_markdown(self, user_id: int) -> Optional[str]:
+        """
+        Get LinkedIn insights data as markdown.
+        
+        Args:
+            user_id: The user ID to retrieve insights for
+            
+        Returns:
+            Markdown content or None if not found
+        """
+        try:
+            markdown_path = os.path.join(self.base_dir, str(user_id), "insights.md")
+            
+            if not os.path.exists(markdown_path):
+                logger.warning(f"Insights markdown not found for user {user_id}")
+                return None
+            
+            with open(markdown_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+            
+            logger.info(f"Retrieved LinkedIn insights markdown for user {user_id}")
+            return content
+            
+        except Exception as e:
+            logger.error(f"Error retrieving LinkedIn insights markdown for user {user_id}: {str(e)}")
+            return None
+    
+    def _convert_insights_to_markdown(self, insights_data: Dict) -> str:
+        """
+        Convert LinkedIn insights data to markdown format.
+        
+        Args:
+            insights_data: The insights data to convert
+            
+        Returns:
+            Formatted markdown string
+        """
+        markdown_lines = []
+        
+        markdown_lines.append("# LinkedIn Profile Insights")
+        markdown_lines.append("")
+        
+        # International Experience
+        if insights_data.get('international_experience'):
+            exp = insights_data['international_experience']
+            markdown_lines.append("## 🌍 International Experience")
+            markdown_lines.append("")
+            if exp.get('countries'):
+                markdown_lines.append("**Countries/Regions:**")
+                for country in exp['countries']:
+                    markdown_lines.append(f"- {country}")
+                markdown_lines.append("")
+            if exp.get('summary'):
+                markdown_lines.append(f"**Summary:** {exp['summary']}")
+                markdown_lines.append("")
+        
+        # Industry Sectors
+        if insights_data.get('industry_sectors'):
+            sectors = insights_data['industry_sectors']
+            markdown_lines.append("## 🏢 Industry Sectors")
+            markdown_lines.append("")
+            if sectors.get('sectors'):
+                markdown_lines.append("**Sectors:**")
+                for sector in sectors['sectors']:
+                    markdown_lines.append(f"- {sector}")
+                markdown_lines.append("")
+            if sectors.get('summary'):
+                markdown_lines.append(f"**Summary:** {sectors['summary']}")
+                markdown_lines.append("")
+        
+        # Education Analysis
+        if insights_data.get('education_analysis'):
+            edu = insights_data['education_analysis']
+            markdown_lines.append("## 🎓 Education Analysis")
+            markdown_lines.append("")
+            if edu.get('degrees'):
+                markdown_lines.append("**Degrees & Qualifications:**")
+                for degree in edu['degrees']:
+                    markdown_lines.append(f"- {degree}")
+                markdown_lines.append("")
+            if edu.get('summary'):
+                markdown_lines.append(f"**Summary:** {edu['summary']}")
+                markdown_lines.append("")
+        
+        # Value Proposition
+        if insights_data.get('value_proposition'):
+            value = insights_data['value_proposition']
+            markdown_lines.append("## 💼 Value Proposition")
+            markdown_lines.append("")
+            if value.get('key_areas'):
+                markdown_lines.append("**Key Areas of Value:**")
+                for area in value['key_areas']:
+                    markdown_lines.append(f"- {area}")
+                markdown_lines.append("")
+            if value.get('summary'):
+                markdown_lines.append(f"**Summary:** {value['summary']}")
+                markdown_lines.append("")
+        
+        # Interests from Posts
+        if insights_data.get('interests_from_posts'):
+            interests = insights_data['interests_from_posts']
+            markdown_lines.append("## 📱 Current Interests (from Posts)")
+            markdown_lines.append("")
+            if interests.get('topics'):
+                markdown_lines.append("**Topics of Interest:**")
+                for topic in interests['topics']:
+                    markdown_lines.append(f"- {topic}")
+                markdown_lines.append("")
+            if interests.get('summary'):
+                markdown_lines.append(f"**Summary:** {interests['summary']}")
+                markdown_lines.append("")
+        
+        # Talking Points
+        if insights_data.get('talking_points'):
+            talking = insights_data['talking_points']
+            markdown_lines.append("## 💬 Talking Points")
+            markdown_lines.append("")
+            if talking.get('points'):
+                markdown_lines.append("**Conversation Starters:**")
+                for i, point in enumerate(talking['points'], 1):
+                    markdown_lines.append(f"{i}. {point}")
+                markdown_lines.append("")
+            if talking.get('summary'):
+                markdown_lines.append(f"**Summary:** {talking['summary']}")
+                markdown_lines.append("")
+        
+        # Raw LLM Response (if available)
+        if insights_data.get('raw_llm_response'):
+            markdown_lines.append("## 🤖 Raw AI Analysis")
+            markdown_lines.append("")
+            markdown_lines.append("```")
+            markdown_lines.append(insights_data['raw_llm_response'])
+            markdown_lines.append("```")
+            markdown_lines.append("")
+        
+        return "\n".join(markdown_lines) 

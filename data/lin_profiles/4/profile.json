@@ -1,0 +1,713 @@
+{
+  "linkedinUrl": "https://www.linkedin.com/in/arvind-raghuraman-16616825/",
+  "firstName": "Arvind",
+  "lastName": "Raghuraman",
+  "fullName": "Arvind Raghuraman",
+  "headline": "Senior Manager - Data Governance",
+  "connections": 1302,
+  "followers": 1366,
+  "email": "arvind.raghuraman@nab.com.au",
+  "mobileNumber": null,
+  "jobTitle": "Senior Manager - Data Governance",
+  "companyName": "Nab",
+  "companyIndustry": "Banking",
+  "companyWebsite": "nab.com.au",
+  "companyLinkedin": "linkedin.com/company/nab",
+  "companyFoundedIn": 1858,
+  "companySize": "10001+",
+  "currentJobDuration": "2 yrs 10 mos",
+  "currentJobDurationInYrs": 2.83,
+  "topSkillsByEndorsements": "Data Management, SQL, Data Analysis, Oracle, Business Analysis",
+  "addressCountryOnly": "Australia",
+  "addressWithCountry": "Greater Sydney Area",
+  "addressWithoutCountry": "Greater Sydney Area",
+  "profilePic": "https://media.licdn.com/dms/image/v2/D5603AQHGhoogMiPbbg/profile-displayphoto-scale_100_100/B56ZeB_L70G0Ac-/0/1750232515503?e=1758153600&v=beta&t=Oo2PQnWjs-ZkqmQcmxSVqBd_OjKybUksciP2KPwUZgo",
+  "profilePicHighQuality": "https://media.licdn.com/dms/image/v2/D5603AQHGhoogMiPbbg/profile-displayphoto-crop_800_800/B56ZeB_L70G0AI-/0/1750232515421?e=1758153600&v=beta&t=GXIUFLI7E0-KrdFlqBS05u3cgXPoBTvJdW9kaXL9fWE",
+  "about": "I am a high energy, experienced Professional, passionate about working together with Business Users and Developers to produce requirements and specifications that accurately reflect business needs and are technologically achievable. With a mix of strong Technical and Business Analysis skillset, I am specialized in the capture, documentation and implementation of \n\n- Data Quality Management Framework\n- Data Governance\n- Data Lineage\n- Process Enhancements\n- Data Profiling and Analysis\n- Business Glossary\n- Metadata Management\n- Data Quality Rules\n- Reference Data Management\n\nI have worked on Regulatory and Compliance projects that include - BCBS239, Common Reporting Standards (CRS). My current project activities involves working on deliverables that meets the CPG235 Guidelines released by APRA (leverages BCBS239 principles) and Group Data Management Implementation (DMI) Framework.",
+  "publicIdentifier": "arvind-raghuraman-16616825",
+  "openConnection": null,
+  "urn": "ACoAAAUvON4BYyU63NsMSBzuaIgsJN3JZRhbH7w",
+  "experiences": [
+    {
+      "companyId": "2357",
+      "companyUrn": "urn:li:fsd_company:2357",
+      "companyLink1": "https://www.linkedin.com/company/2357/",
+      "logo": "https://media.licdn.com/dms/image/v2/D560BAQEY7u2BB7E6lg/company-logo_100_100/B56ZcLARCZHwAc-/0/1748236309311/nab_logo?e=1755734400&v=beta&t=PGq7r26O-lTx7YRAHflGm4ZzBVQMIbzuqf62_JeLdV8",
+      "title": "Senior Manager - Data Governance",
+      "subtitle": "NAB · Full-time",
+      "caption": "Oct 2022 - Present · 2 yrs 10 mos",
+      "metadata": "Sydney, New South Wales, Australia",
+      "breakdown": false,
+      "subComponents": [
+        {
+          "description": []
+        }
+      ]
+    },
+    {
+      "companyId": "2848",
+      "companyUrn": "urn:li:fsd_company:2848",
+      "companyLink1": "https://www.linkedin.com/company/2848/",
+      "logo": "https://media.licdn.com/dms/image/v2/D560BAQGLodxq_N-mcA/company-logo_200_200/company-logo_200_200/0/1692243810359/commonwealthbank_logo?e=1755734400&v=beta&t=vLYZA19UlySJKdnfyFh7dX8iqlVTYaDw6x8ngLvXHak",
+      "title": "Commonwealth Bank",
+      "subtitle": "4 yrs 3 mos",
+      "breakdown": true,
+      "subComponents": [
+        {
+          "title": "Senior Manager - Group AI Policy",
+          "subtitle": "Full-time",
+          "caption": "Apr 2022 - Oct 2022 · 7 mos",
+          "metadata": "Sydney, New South Wales, Australia",
+          "description": []
+        },
+        {
+          "title": "Senior Manager - Records Management",
+          "subtitle": "Full-time",
+          "caption": "Aug 2020 - May 2022 · 1 yr 10 mos",
+          "metadata": "Sydney, New South Wales, Australia",
+          "description": [
+            {
+              "type": "textComponent",
+              "text": "Member of Chief Data Office working on the roll out of Group Records Management Policy Suite."
+            }
+          ]
+        },
+        {
+          "title": "Manager - Group Data Management",
+          "caption": "Feb 2020 - Aug 2020 · 7 mos",
+          "metadata": "Sydney, Australia",
+          "description": [
+            {
+              "type": "textComponent",
+              "text": "Member of Chief Data Office working on Data Management initiatives."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "companyId": "3597",
+      "companyUrn": "urn:li:fsd_company:3597",
+      "companyLink1": "https://www.linkedin.com/company/3597/",
+      "logo": "https://media.licdn.com/dms/image/v2/C560BAQHvhPjh_QGVEw/company-logo_200_200/company-logo_200_200/0/1630583808407/westpac_logo?e=1755734400&v=beta&t=P4obXam1FjseGivZWZ3dd7cCB1d41VIdVQUWAANKEd0",
+      "title": "Senior Business Analyst",
+      "subtitle": "Westpac",
+      "caption": "Jul 2017 - Aug 2018 · 1 yr 2 mos",
+      "metadata": "Greater Sydney Area",
+      "breakdown": false,
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "textComponent",
+              "text": "Tasked with the implementation of Regulatory Reporting for Common Reporting Standards (CRS) with Westpac Group."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "companyId": "2235",
+      "companyUrn": "urn:li:fsd_company:2235",
+      "companyLink1": "https://www.linkedin.com/company/2235/",
+      "logo": "https://media.licdn.com/dms/image/v2/C4E0BAQFIXBBXX9EX-Q/company-logo_200_200/company-logo_200_200/0/1656579432276/standardchartered_logo?e=1755734400&v=beta&t=9kiniBOgd_Y8xYMsrUnKOVp1HixU1pWA68uooIecOG0",
+      "title": "Standard Chartered Bank",
+      "subtitle": "4 yrs 5 mos",
+      "breakdown": true,
+      "subComponents": [
+        {
+          "title": "Business Analyst - Data Services and Standards - BCBS239",
+          "caption": "Nov 2014 - Jun 2017 · 2 yrs 8 mos",
+          "metadata": "Kuala Lumpur, Federal Territory of Kuala Lumpur, Malaysia",
+          "description": [
+            {
+              "type": "textComponent",
+              "text": "Working for client of Tata Consultancy Services - Standard Chartered Bank. Responsible for:\n\n1. Identification of Golden Source of Data for Credit Risk Reports\n2. Documentation of Metadata and capture of Data Flow from Source System to Reports across Infrastructure\n3. Building on the Business Glossary for Terms across the different systems."
+            }
+          ]
+        },
+        {
+          "title": "BI Consultant",
+          "caption": "Feb 2013 - Oct 2014 · 1 yr 9 mos",
+          "metadata": "Greater Chennai Area",
+          "description": [
+            {
+              "type": "textComponent",
+              "text": "BI Lead (through Tata Consultancy Services) for the client - Standard Chartered Bank."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "companyId": "1472",
+      "companyUrn": "urn:li:fsd_company:1472",
+      "companyLink1": "https://www.linkedin.com/company/1472/",
+      "logo": "https://media.licdn.com/dms/image/v2/D4E0BAQEfAZWzerj03w/company-logo_100_100/B4EZdkPGXYGcAQ-/0/1749733370529/general_motors_logo?e=1755734400&v=beta&t=OxIsp1u_lymQv1d2QXEde2HoZKKdkOGRS4qVhoBHdoY",
+      "title": "BI Consultant",
+      "subtitle": "General Motors",
+      "caption": "Jan 2012 - Mar 2013 · 1 yr 3 mos",
+      "metadata": "Greater Chennai Area",
+      "breakdown": false,
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "textComponent",
+              "text": "BI consultant with Hewlett Packard working for the client - General Motors. Responsible for the design, development and roll out of Global Labor Codes and associated BI reports."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "updates": [],
+  "skills": [
+    {
+      "title": "Data Management",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "Endorsed by 1 person in the last 6 months"
+            },
+            {
+              "type": "insightComponent",
+              "text": "7 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Analysis",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "Endorsed by 2 colleagues at Standard Chartered"
+            },
+            {
+              "type": "insightComponent",
+              "text": "Endorsed by 1 person in the last 6 months"
+            },
+            {
+              "type": "insightComponent",
+              "text": "6 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Profiling",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "Endorsed by 1 person in the last 6 months"
+            },
+            {
+              "type": "insightComponent",
+              "text": "3 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Quality",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "1 endorsement"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Tracking",
+      "subComponents": [
+        {
+          "description": []
+        }
+      ]
+    },
+    {
+      "title": "Metadata Management",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "1 endorsement"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Group Presentations",
+      "subComponents": [
+        {
+          "description": []
+        }
+      ]
+    },
+    {
+      "title": "SQL",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "7 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Oracle",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "5 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "SDLC",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "3 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Informatica",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "3 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Warehousing",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "3 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Business Analysis",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "5 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Microstrategy",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "2 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Testing",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "2 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Business Intelligence",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "3 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "PL/SQL",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "2 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Software Development",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "2 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Web Applications",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "2 endorsements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "User Acceptance Testing",
+      "subComponents": [
+        {
+          "description": [
+            {
+              "type": "insightComponent",
+              "text": "3 endorsements"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "profilePicAllDimensions": [
+    {
+      "width": 100,
+      "height": 100,
+      "url": "https://media.licdn.com/dms/image/v2/D5603AQHGhoogMiPbbg/profile-displayphoto-scale_100_100/B56ZeB_L70G0Ac-/0/1750232515503?e=1758153600&v=beta&t=Oo2PQnWjs-ZkqmQcmxSVqBd_OjKybUksciP2KPwUZgo"
+    },
+    {
+      "width": 200,
+      "height": 200,
+      "url": "https://media.licdn.com/dms/image/v2/D5603AQHGhoogMiPbbg/profile-displayphoto-scale_200_200/B56ZeB_L70G0AY-/0/1750232515503?e=1758153600&v=beta&t=Kbv-5bzsdh7BjxHluoTiYq_0OMpZLihNMuve5DbiGZI"
+    },
+    {
+      "width": 800,
+      "height": 800,
+      "url": "https://media.licdn.com/dms/image/v2/D5603AQHGhoogMiPbbg/profile-displayphoto-crop_800_800/B56ZeB_L70G0AI-/0/1750232515421?e=1758153600&v=beta&t=GXIUFLI7E0-KrdFlqBS05u3cgXPoBTvJdW9kaXL9fWE"
+    },
+    {
+      "width": 400,
+      "height": 400,
+      "url": "https://media.licdn.com/dms/image/v2/D5603AQHGhoogMiPbbg/profile-displayphoto-scale_400_400/B56ZeB_L70G0Ag-/0/1750232515503?e=1758153600&v=beta&t=etJlxi0FfM8iEil7TnW4RMCFmStJPGrqkFbZDvl7MtE"
+    }
+  ],
+  "educations": [
+    {
+      "companyId": "20473144",
+      "companyUrn": "urn:li:fsd_company:20473144",
+      "companyLink1": "https://www.linkedin.com/company/20473144/",
+      "logo": "https://media.licdn.com/dms/image/v2/C510BAQFVp-fBqkKQyg/company-logo_200_200/company-logo_200_200/0/1630625612861?e=1755734400&v=beta&t=e1snhGsq2X4v0uXMzcHP8dHO1HxH9ZNwV5mzVsQAQ_4",
+      "title": "SRM IST Chennai",
+      "subtitle": "Bachelors in Computer Applications, Computer Programming, Specific Applications",
+      "caption": "2005 - 2008",
+      "breakdown": false,
+      "subComponents": [
+        {
+          "description": []
+        }
+      ]
+    },
+    {
+      "companyLink1": "https://www.linkedin.com/search/results/all/?keywords=Bhaktavatsalam+Vidyashram",
+      "title": "Bhaktavatsalam Vidyashram",
+      "subtitle": "Bachelor's degree, Computer Science",
+      "caption": "1991 - 2005",
+      "breakdown": false,
+      "subComponents": [
+        {
+          "description": []
+        }
+      ]
+    }
+  ],
+  "licenseAndCertificates": [
+    {
+      "companyId": "11052555",
+      "companyUrn": "urn:li:fsd_company:11052555",
+      "companyLink1": "https://www.linkedin.com/company/11052555/",
+      "logo": "https://media.licdn.com/dms/image/v2/D4E0BAQEbH21LfnO7Fw/company-logo_400_400/B4EZfGuhldHsAk-/0/1751385775219/edm_council_logo?e=1755734400&v=beta&t=0-zAOVfCDOTldyHfQOUGPABfrfGoSzvlMTKJwygGXbk",
+      "title": "DCAM Accredited V2",
+      "subtitle": "EDM Association",
+      "caption": "Issued Feb 2021",
+      "breakdown": false,
+      "subComponents": [
+        {
+          "description": []
+        }
+      ]
+    },
+    {
+      "companyId": "871226",
+      "companyUrn": "urn:li:fsd_company:871226",
+      "companyLink1": "https://www.linkedin.com/company/871226/",
+      "logo": "https://media.licdn.com/dms/image/v2/D560BAQFdepbfdMhg3g/company-logo_200_200/company-logo_200_200/0/1719257814838/scrum_alliance_logo?e=1755734400&v=beta&t=gHhmk4MCuK9uukZUL8sSbT45tTSmN6-nNyzqqzOWvV0",
+      "title": "Certified Scrum Master",
+      "subtitle": "Scrum Alliance",
+      "caption": "Issued Apr 2018",
+      "breakdown": false,
+      "subComponents": [
+        {
+          "description": []
+        }
+      ]
+    }
+  ],
+  "honorsAndAwards": [],
+  "languages": [
+    {
+      "title": "English",
+      "breakdown": false,
+      "subComponents": [
+        {
+          "description": []
+        }
+      ]
+    },
+    {
+      "title": "Hindi",
+      "breakdown": false,
+      "subComponents": [
+        {
+          "description": []
+        }
+      ]
+    }
+  ],
+  "volunteerAndAwards": [],
+  "verifications": [],
+  "promos": [],
+  "highlights": [],
+  "projects": [],
+  "publications": [],
+  "patents": [],
+  "courses": [],
+  "testScores": [],
+  "organizations": [],
+  "volunteerCauses": [],
+  "interests": [
+    {
+      "section_name": "Top Voices",
+      "section_components": [
+        {
+          "titleV2": "Matt Comyn",
+          "caption": "56,919 followers",
+          "subtitle": "CEO at Commonwealth Bank of Australia",
+          "size": "LARGE",
+          "textActionTarget": "https://www.linkedin.com/in/mattcomyn",
+          "subComponents": []
+        },
+        {
+          "titleV2": "Andrew Irvine",
+          "caption": "37,837 followers",
+          "subtitle": "NAB Group CEO and Managing Director | Australian Banking Association Council Chair\n\n#Banking #Housing #Sustainability #CyberSecurity #Economy",
+          "size": "LARGE",
+          "textActionTarget": "https://www.linkedin.com/in/andrew-irvine-755a73a1",
+          "subComponents": []
+        }
+      ]
+    },
+    {
+      "section_name": "Companies",
+      "section_components": [
+        {
+          "titleV2": "Tata Consultancy Services",
+          "caption": "17,570,545 followers",
+          "size": "LARGE",
+          "textActionTarget": "https://www.linkedin.com/company/1353/",
+          "subComponents": []
+        },
+        {
+          "titleV2": "Standard Chartered",
+          "caption": "2,279,223 followers",
+          "size": "LARGE",
+          "textActionTarget": "https://www.linkedin.com/company/2235/",
+          "subComponents": []
+        }
+      ]
+    },
+    {
+      "section_name": "Groups",
+      "section_components": [
+        {
+          "titleV2": "CIO/CISO Connections Group",
+          "caption": "4,623 members",
+          "size": "LARGE",
+          "textActionTarget": "https://www.linkedin.com/groups/13594356",
+          "subComponents": []
+        },
+        {
+          "titleV2": "Data Governance and Data Quality Leaders Forum (Discussion Only)",
+          "caption": "22,622 members",
+          "size": "LARGE",
+          "textActionTarget": "https://www.linkedin.com/groups/1061007",
+          "subComponents": []
+        }
+      ]
+    },
+    {
+      "section_name": "Newsletters",
+      "section_components": [
+        {
+          "titleV2": "Data Governed",
+          "caption": "Published monthly",
+          "subtitle": "Discover Data Governed, a newsletter dedicated to data governance insights and expertise",
+          "size": "LARGE",
+          "textActionTarget": "https://www.linkedin.com/newsletters/7056625910011068416",
+          "subComponents": [
+            {
+              "insightComponent": {
+                "text": "Chad Barendse",
+                "actionTarget": "https://www.linkedin.com/in/chadbarendse"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Schools",
+      "section_components": [
+        {
+          "titleV2": "SRM IST Chennai",
+          "caption": "255,938 followers",
+          "size": "LARGE",
+          "textActionTarget": "https://www.linkedin.com/school/20473144/",
+          "subComponents": []
+        },
+        {
+          "titleV2": "SRM University",
+          "caption": "219,728 followers",
+          "size": "LARGE",
+          "textActionTarget": "https://www.linkedin.com/school/879960/",
+          "subComponents": []
+        }
+      ]
+    }
+  ],
+  "recommendations": [
+    {
+      "section_name": "Received",
+      "section_components": [
+        {
+          "titleV2": "Rohit P.",
+          "caption": "July 14, 2025, Rohit reported directly to Arvind",
+          "subtitle": "Navigating Data Risk | Manager - Data Risk Governance",
+          "size": "LARGE",
+          "textActionTarget": "https://www.linkedin.com/in/rohit-p-203596142",
+          "image": "https://media.licdn.com/dms/image/v2/C4E03AQFVpDFxlh3hdg/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1520559343065?e=1758153600&v=beta&t=39X-xHt2kDwwLw_3O4kywTdesde4Pc9s64X78wb2ArQ",
+          "subComponents": [
+            {
+              "fixedListComponent": [
+                {
+                  "type": "textComponent",
+                  "text": "It has been an absolute privilege working with Arvind. Under his leadership, we have seen significant strides in establishing a federated model for managing data risk — empowering our divisions to take real ownership and accountability.\n\nHe has championed uplifting stakeholder maturity through an enhanced data stewardship model, setting the foundations for sustainable data risk management across the enterprise.\n\nAbove all, Arvind has been a great mentor and a true people leader — always leading with trust, integrity and genuine care for his team’s growth. Wishing you all the very best for what’s next, Arvind. Your impact here will be long-lasting and deeply appreciated."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "titleV2": "Graham Jefferson",
+          "caption": "April 19, 2023, Graham was senior to Arvind but didn't manage Arvind directly",
+          "subtitle": "AI, data and responsible tech",
+          "size": "LARGE",
+          "textActionTarget": "https://www.linkedin.com/in/grahamjefferson",
+          "image": "https://media.licdn.com/dms/image/v2/C4E03AQEppAb1tgMDjw/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1516218064305?e=1758153600&v=beta&t=MgiLWdgcZn6tspCR85ER_8fNrf3MujzETu4ekstIdog",
+          "subComponents": [
+            {
+              "fixedListComponent": [
+                {
+                  "type": "textComponent",
+                  "text": "Arvind and I worked together at CBA for six months, developing a draft AI policy.   This was a challenging and somewhat high profile exercise. We collaborated closely and most days interacted regularly. It was a joy for me to work with Arvind. He is engaging, thoughtful, considerate, and completely professional. We traded ideas and I would like to think we learned from each other, but it was certainly the case that I learned from him.  He has deep expertise in all matters relating to data and applied that skill set thoughtfully to the AI related work we undertook. "
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Given",
+      "section_components": [
+        {
+          "titleV2": "Seetharamanjaneyulu P",
+          "caption": "November 15, 2012, Arvind worked with Seetharamanjaneyulu on the same team",
+          "subtitle": "Assoc - Technical Architect at Legato Health Technologies",
+          "size": "LARGE",
+          "textActionTarget": "https://www.linkedin.com/in/seetharamanjaneyulu-p-a8b5b616",
+          "subComponents": [
+            {
+              "fixedListComponent": [
+                {
+                  "type": "textComponent",
+                  "text": "I had the opportunity to work with Seetharam for the past one year. He was a Cognos developer and joined with me to start working on developing Microstrategy Reports.\r\n\r\nSeetharam is a quick learner and has the interest and involvement to go that extra mile and learn new technologies. He is more focussed on developing new ideas and methods that will reduce the manual workload and increase productivity. Its been a great learning curve for me as well working with him... I wish him all good luck for all his future projects and assignements."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

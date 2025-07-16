@@ -150,12 +150,53 @@ class TestMeetingService:
              patch.object(meeting_service.csv_manager, 'get_meeting') as mock_csv_get:
             
             mock_load.return_value = expected_data
-            mock_csv_get.return_value = {'created_date': '2024-01-01'}
+            mock_csv_get.return_value = {
+                'meeting_id': 'test-123',
+                'meeting_title': 'Test Meeting',
+                'meeting_date': '2024-01-15',
+                'participant_count': '2',
+                'created_date': '2024-01-01',
+                'last_updated': '2024-01-01'
+            }
             
             result = meeting_service.get_meeting('test-123')
             
-            assert result == expected_data
-            assert result['csv_metadata'] == {'created_date': '2024-01-01'}
+            # Verify the structure matches MeetingProfile requirements
+            assert result['meeting_id'] == 'test-123'
+            assert result['meeting_title'] == 'Test Meeting'
+            assert result['meeting_date'] == '2024-01-15'
+            assert result['participant_count'] == 2  # Should be converted to int
+            assert result['created_date'] == '2024-01-01'
+            assert result['last_updated'] == '2024-01-01'
+            assert 'participants' in result
+            assert 'csv_metadata' in result
+    
+    def test_get_meeting_fallback_structure(self, meeting_service):
+        """Test meeting retrieval when CSV data is not available."""
+        expected_data = {
+            'meeting_id': 'test-123',
+            'meeting_title': 'Test Meeting',
+            'meeting_date': '2024-01-15',
+            'created_date': '2024-01-01',
+            'participants': [{'name': 'John Doe'}]
+        }
+        
+        with patch.object(meeting_service.file_manager, 'load_meeting_data') as mock_load, \
+             patch.object(meeting_service.csv_manager, 'get_meeting') as mock_csv_get:
+            
+            mock_load.return_value = expected_data
+            mock_csv_get.return_value = None  # No CSV data
+            
+            result = meeting_service.get_meeting('test-123')
+            
+            # Verify fallback structure
+            assert result['meeting_id'] == 'test-123'
+            assert result['meeting_title'] == 'Test Meeting'
+            assert result['meeting_date'] == '2024-01-15'
+            assert result['participant_count'] == 1  # Should count participants
+            assert result['created_date'] == '2024-01-01'
+            assert result['last_updated'] == 'Unknown'
+            assert 'participants' in result
     
     def test_get_meeting_not_found(self, meeting_service):
         """Test meeting retrieval when meeting doesn't exist."""
@@ -252,6 +293,52 @@ class TestMeetingService:
         assert "Experience" in result
         assert "Education" in result
         assert "Skills" in result
+    
+    def test_linkedin_service_return_full_object(self):
+        """Test LinkedIn service with return_full_object parameter."""
+        from src.common.services.linkedin_service import LinkedInService
+        
+        linkedin_service = LinkedInService()
+        
+        # Mock the Apify client and other dependencies
+        with patch.object(linkedin_service.apify_client, 'scrape_linkedin_profile') as mock_scrape, \
+             patch.object(linkedin_service.csv_manager, 'find_user_by_linkedin_url') as mock_find, \
+             patch.object(linkedin_service.csv_manager, 'add_user') as mock_add, \
+             patch.object(linkedin_service.file_manager, 'save_linkedin_profile') as mock_save:
+            
+            # Mock return values
+            mock_find.return_value = None  # New user
+            mock_add.return_value = 1
+            mock_save.return_value = True
+            
+            # Mock profile data
+            mock_profile_data = {
+                'fullName': 'John Doe',
+                'companyName': 'Tech Corp',
+                'headline': 'Software Engineer at Tech Corp',
+                'experiences': [{'companyName': 'Tech Corp'}],
+                'skills': ['Python', 'JavaScript']
+            }
+            mock_scrape.return_value = mock_profile_data
+            
+            # Test with return_full_object=True (default)
+            success, response = linkedin_service.scrape_and_store_profile(
+                'https://linkedin.com/in/johndoe', 
+                return_full_object=True
+            )
+            
+            assert success is True
+            assert 'full_profile' in response
+            assert response['full_profile'] == mock_profile_data
+            
+            # Test with return_full_object=False
+            success, response = linkedin_service.scrape_and_store_profile(
+                'https://linkedin.com/in/johndoe', 
+                return_full_object=False
+            )
+            
+            assert success is True
+            assert 'full_profile' not in response
 
 
 class TestMeetingCSVManager:

@@ -12,12 +12,13 @@ class LinkedInService:
         self.csv_manager = CSVManager()
         self.file_manager = FileManager()
     
-    def scrape_and_store_profile(self, linkedin_url: str) -> Tuple[bool, Dict]:
+    def scrape_and_store_profile(self, linkedin_url: str, return_full_object: bool = True) -> Tuple[bool, Dict]:
         """
         Scrape LinkedIn profile and store the data.
         
         Args:
             linkedin_url: The LinkedIn profile URL to scrape
+            return_full_object: Whether to return the entire profile object (default: True)
             
         Returns:
             Tuple of (success: bool, response_data: Dict)
@@ -52,6 +53,7 @@ class LinkedInService:
             if not success:
                 return False, {"error": "Failed to save profile data"}
             
+            # Create response data
             response_data = {
                 "user_id": user_id,
                 "name": name,
@@ -60,6 +62,11 @@ class LinkedInService:
                 "status": "updated" if existing_user else "created",
                 "profile_summary": self._create_profile_summary(profile_data)
             }
+            
+            # Add full profile object if requested
+            if return_full_object:
+                response_data["full_profile"] = profile_data
+                logger.info(f"Including full profile object in response for user {user_id}")
             
             logger.info(f"Successfully completed LinkedIn profile pipeline for user {user_id}")
             return True, response_data

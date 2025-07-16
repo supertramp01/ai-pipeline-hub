@@ -1,0 +1,28 @@
+{
+  "meeting_id": "59563b09-2198-4b07-aa22-396bd5106934",
+  "meeting_title": "Test Meeting",
+  "meeting_date": "2025-01-15T10:00:00Z",
+  "created_date": "2025-07-12T12:00:48.010715",
+  "participants": [
+    {
+      "name": "John Doe",
+      "company": "Tech Corp",
+      "user_id": null,
+      "company_id": null,
+      "linkedin_url": "https://linkedin.com/in/johndoe",
+      "background": null,
+      "meeting_objective": "Discuss partnership opportunities",
+      "looking_for": null,
+      "what_they_offer": null,
+      "talking_points": {
+        "John Doe": [
+          "Discuss potential partnership opportunities with Tech Corp and how it could benefit both parties",
+          "Ask about the other participants' current projects and how a partnership with Tech Corp could enhance those projects",
+          "Propose a brainstorming session to identify areas where Tech Corp's resources could be beneficial",
+          "Inquire about the challenges the other participants are facing and discuss how Tech Corp could provide solutions",
+          "Suggest a follow-up meeting to delve deeper into potential collaboration opportunities"
+        ]
+      }
+    }
+  ]
+}

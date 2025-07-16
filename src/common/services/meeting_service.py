@@ -125,9 +125,30 @@ class MeetingService:
             # Get CSV metadata
             csv_data = self.csv_manager.get_meeting(meeting_id)
             if csv_data:
-                meeting_data['csv_metadata'] = csv_data
+                # Merge CSV data with meeting data to create complete response
+                response_data = {
+                    'meeting_id': meeting_id,
+                    'meeting_title': csv_data.get('meeting_title', meeting_data.get('meeting_title', 'Unknown')),
+                    'meeting_date': csv_data.get('meeting_date', meeting_data.get('meeting_date', 'Unknown')),
+                    'participant_count': int(csv_data.get('participant_count', len(meeting_data.get('participants', [])))),
+                    'created_date': csv_data.get('created_date', meeting_data.get('created_date', 'Unknown')),
+                    'last_updated': csv_data.get('last_updated', 'Unknown'),
+                    'participants': meeting_data.get('participants', []),
+                    'csv_metadata': csv_data
+                }
+            else:
+                # Fallback if CSV data not found
+                response_data = {
+                    'meeting_id': meeting_id,
+                    'meeting_title': meeting_data.get('meeting_title', 'Unknown'),
+                    'meeting_date': meeting_data.get('meeting_date', 'Unknown'),
+                    'participant_count': len(meeting_data.get('participants', [])),
+                    'created_date': meeting_data.get('created_date', 'Unknown'),
+                    'last_updated': 'Unknown',
+                    'participants': meeting_data.get('participants', [])
+                }
             
-            return meeting_data
+            return response_data
             
         except Exception as e:
             logger.error(f"Error getting meeting: {e}")

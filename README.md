@@ -18,6 +18,7 @@ A REST API application for meeting preparation that scrapes LinkedIn profiles us
 - **Advanced Company Research**: Comprehensive company analysis with multiple data sources
 - **Intelligent Summarization**: AI-powered summaries with user prompt customization
 - **AI-Powered Meeting Preparation**: Generates personalized talking points for each participant
+- **LinkedIn Profile Insights**: AI-powered analysis of LinkedIn profiles to extract international experience, industry sectors, education, value proposition, interests from posts, and talking points
 - **Logging**: Comprehensive logging throughout the application
 
 ## Project Structure
@@ -48,11 +49,13 @@ ai-pipeline-hub/
 │       │   ├── linkedin_service.py # LinkedIn service orchestration
 │       │   ├── company_service.py # Company service orchestration
 │       │   ├── company_summary_service.py # Company summary service
-│       │   └── meeting_service.py # Meeting service orchestration
+│       │   ├── meeting_service.py # Meeting service orchestration
+│       │   └── linkedin_insights_service.py # LinkedIn insights service
 │       └── prompts/
 │           ├── __init__.py
 │           ├── company_summary.py # Company summary prompts
-│           └── meeting_preparation.py # Meeting preparation prompts
+│           ├── meeting_preparation.py # Meeting preparation prompts
+│           └── linkedin_insights.py # LinkedIn insights prompts
 ├── data/
 │   ├── lin_profiles/           # LinkedIn profile data storage
 │   ├── company_info/           # Company research and summary data storage
@@ -65,7 +68,8 @@ ai-pipeline-hub/
 │   ├── test_comprehensive_data.py # Comprehensive data test
 │   ├── test_company_research.py # Company research tests
 │   ├── test_company_summary.py # Company summary tests
-│   └── test_meeting_service.py # Meeting service tests
+│   ├── test_meeting_service.py # Meeting service tests
+│   └── test_linkedin_insights_service.py # LinkedIn insights tests
 ├── .env                        # Environment variables
 ├── requirements.txt            # Python dependencies
 └── README.md                   # This file
@@ -87,6 +91,7 @@ Create a `.env` file in the root directory with the following variables:
 APIFY_ACTOR_ID=your_apify_actor_id
 APIFY_API_TOKEN=your_apify_api_token
 TAVILY_API_KEY=your_tavily_api_key
+OPENAI_API_KEY=your_openai_api_key
 ```
 
 ### 3. Run the Application
@@ -112,9 +117,12 @@ The API will be available at `http://localhost:8000`
 
 ### 3. Scrape LinkedIn Profile
 - **POST** `/api/v1/linkedin/scrape`
-- **Body**: `{"linkedin_url": "https://linkedin.com/in/username"}`
+- **Body**: `{"linkedin_url": "https://linkedin.com/in/username", "return_full_object": true}`
 - Scrapes a LinkedIn profile and stores the data
-- Returns user information, status, and profile summary
+- Returns user information, status, profile summary, and optionally the full profile object
+- **Parameters**:
+  - `linkedin_url` (required): LinkedIn profile URL to scrape
+  - `return_full_object` (optional, default: true): Whether to include the full profile object in the response
 
 ### 4. Get LinkedIn Profile
 - **GET** `/api/v1/linkedin/profile/{user_id}`
@@ -128,50 +136,78 @@ The API will be available at `http://localhost:8000`
 - **GET** `/api/v1/linkedin/users`
 - Returns a list of all stored user profiles
 
+### LinkedIn Insights Endpoints
+
+### 7. Generate LinkedIn Insights
+- **POST** `/api/v1/linkedin/insights/generate`
+- **Body**: `{"user_id": 1, "custom_prompt": "Focus on technical skills and cloud experience"}` (custom_prompt is optional)
+- Analyzes LinkedIn profile data using AI to generate comprehensive insights
+- Extracts international experience, industry sectors, education, value proposition, interests from posts, and talking points
+- Stores insights in JSON and markdown formats
+- Returns generated insights with status and metadata
+- **Parameters**:
+  - `user_id` (required): LinkedIn user ID to analyze
+  - `custom_prompt` (optional): Custom analysis focus or requirements
+
+### 8. Get LinkedIn Insights
+- **GET** `/api/v1/linkedin/insights/{user_id}`
+- Retrieves stored LinkedIn insights data in JSON format
+- Returns comprehensive analysis including international experience, industry sectors, education, value proposition, interests, and talking points
+
+### 9. Get LinkedIn Insights Markdown
+- **GET** `/api/v1/linkedin/insights/{user_id}/markdown`
+- Retrieves stored LinkedIn insights data in formatted markdown
+- Returns human-readable analysis with emojis and structured sections
+
+### 10. List All LinkedIn Insights
+- **GET** `/api/v1/linkedin/insights/list`
+- Returns a list of all stored insights with user information
+- Provides overview of all analyzed profiles and their insights
+
 ### Company Research Endpoints
 
-### 7. Research Company
+### 11. Research Company
 - **POST** `/api/v1/company/research`
 - **Body**: `{"website_url": "https://company.com", "company_name": "Company Name"}` (company_name is optional)
 - Researches a company website and stores comprehensive data
 - Returns company information, status, and research metadata
 
-### 8. Get Company Data
+### 12. Get Company Data
 - **GET** `/api/v1/company/{company_id}`
 - Retrieves stored company research data including CSV metadata and research data
 
-### 9. Get Company JSON
+### 13. Get Company JSON
 - **GET** `/api/v1/company/{company_id}/json`
 - Returns the raw company research data in JSON format
 
-### 10. Get Company Markdown
+### 14. Get Company Markdown
 - **GET** `/api/v1/company/{company_id}/markdown`
 - Returns the company research data in formatted markdown
 
-### 11. List All Companies
+### 15. List All Companies
 - **GET** `/api/v1/company/list`
 - Returns a list of all stored company profiles
 
 ### Company Summary Endpoints
 
-### 12. Generate Company Summary
+### 16. Generate Company Summary
 - **POST** `/api/v1/company/summary/generate`
 - **Body**: `{"company_id": "uuid", "company_website": "https://company.com", "user_prompt": "Focus on financial performance"}` (company_id or company_website required, user_prompt optional)
 - Generates an intelligent summary based on company research data and optional user prompt
 - Stores summary in JSON and markdown formats
 - Returns summary data and metadata
 
-### 13. Get Company Summary
+### 17. Get Company Summary
 - **GET** `/api/v1/company/summary/{company_id}`
 - Retrieves previously generated company summary by company ID
 
-### 14. Get Company Summary by Website
+### 18. Get Company Summary by Website
 - **GET** `/api/v1/company/summary/website/{website_url}`
 - Retrieves previously generated company summary by website URL
 
 ### Meeting Preparation Endpoints
 
-### 15. Create Meeting
+### 19. Create Meeting
 - **POST** `/api/v1/meeting/create`
 - **Body**: 
 ```json
@@ -210,12 +246,17 @@ The API will be available at `http://localhost:8000`
 - `meeting_objective` (required): What they want to achieve in the meeting
 - `looking_for` (optional): What they need from other participants
 
-### 16. Get Meeting
+### 20. Get Meeting
 - **GET** `/api/v1/meeting/{meeting_id}`
-- Retrieves meeting information including participant data and talking points
-- Returns comprehensive meeting data with CSV metadata
+- Retrieves complete meeting information including participant data and talking points
+- Returns comprehensive meeting data with all details
 
-### 17. List All Meetings
+### 21. Get Meeting Metadata
+- **GET** `/api/v1/meeting/{meeting_id}/metadata`
+- Retrieves meeting metadata without participant details
+- Returns structured meeting profile information
+
+### 22. List All Meetings
 - **GET** `/api/v1/meeting/list`
 - Returns a list of all stored meetings with metadata
 
@@ -329,6 +370,41 @@ The application extracts all possible fields from LinkedIn profiles, including:
 - Premium member status
 - Last updated timestamp
 
+## LinkedIn Insights Features
+
+The LinkedIn insights pipeline provides AI-powered analysis of LinkedIn profiles to extract meaningful professional insights:
+
+### Insight Categories
+- **🌍 International Experience**: Countries and regions where the person has worked, studied, or lived
+- **🏢 Industry Sectors**: Different industries and sectors they've worked in throughout their career
+- **🎓 Education Analysis**: Educational background, degrees, and qualifications with relevance assessment
+- **💼 Value Proposition**: How their skills, experience, and projects make them valuable to organizations
+- **📱 Interests from Posts**: Current interests and focus areas based on recent LinkedIn posts
+- **💬 Talking Points**: Conversation starters and networking topics based on their background
+
+### Analysis Components
+- **Profile Data Processing**: Extracts and structures LinkedIn profile information for analysis
+- **AI-Powered Analysis**: Uses OpenAI GPT-4 to generate comprehensive insights
+- **Custom Prompt Support**: Allows users to specify analysis focus areas
+- **Structured Output**: Provides insights in both JSON and markdown formats
+- **Fallback Handling**: Graceful handling of LLM failures with structured responses
+
+### Insight Generation Process
+1. **Data Extraction**: Loads stored LinkedIn profile data (JSON format)
+2. **Data Preparation**: Structures profile data for AI analysis
+3. **LLM Analysis**: Sends structured data to OpenAI GPT-4 with specialized prompts
+4. **Response Processing**: Parses JSON response or creates structured fallback
+5. **Storage**: Saves insights in both JSON and markdown formats
+6. **Retrieval**: Provides endpoints to access insights in multiple formats
+
+### Custom Analysis Focus
+- **Technical Skills**: Focus on programming languages, technologies, and technical expertise
+- **Leadership Experience**: Emphasize management and leadership roles
+- **Industry Expertise**: Highlight specific industry knowledge and experience
+- **Geographic Focus**: Analyze regional or international experience
+- **Recent Activities**: Focus on current interests and recent professional activities
+- **Networking Value**: Identify potential collaboration and partnership opportunities
+
 ## Company Research Features
 
 The company research pipeline provides comprehensive analysis including:
@@ -377,9 +453,15 @@ The company summary pipeline generates intelligent summaries with:
 ### Scrape a LinkedIn Profile
 
 ```bash
+# With full profile object (default)
 curl -X POST "http://localhost:8000/api/v1/linkedin/scrape" \
      -H "Content-Type: application/json" \
-     -d '{"linkedin_url": "https://linkedin.com/in/satyanadella/"}'
+     -d '{"linkedin_url": "https://linkedin.com/in/satyanadella/", "return_full_object": true}'
+
+# Without full profile object (summary only)
+curl -X POST "http://localhost:8000/api/v1/linkedin/scrape" \
+     -H "Content-Type: application/json" \
+     -d '{"linkedin_url": "https://linkedin.com/in/satyanadella/", "return_full_object": false}'
 ```
 
 ### Get Profile Data
@@ -398,6 +480,36 @@ curl "http://localhost:8000/api/v1/linkedin/profile/1/summary"
 
 ```bash
 curl "http://localhost:8000/api/v1/linkedin/users"
+```
+
+### Generate LinkedIn Insights
+
+```bash
+# Generate insights with default analysis
+curl -X POST "http://localhost:8000/api/v1/linkedin/insights/generate" \
+     -H "Content-Type: application/json" \
+     -d '{"user_id": 1}'
+
+# Generate insights with custom focus
+curl -X POST "http://localhost:8000/api/v1/linkedin/insights/generate" \
+     -H "Content-Type: application/json" \
+     -d '{"user_id": 1, "custom_prompt": "Focus on technical skills and cloud architecture experience"}'
+```
+
+### Get LinkedIn Insights
+
+```bash
+# Get insights in JSON format
+curl "http://localhost:8000/api/v1/linkedin/insights/1"
+
+# Get insights in markdown format
+curl "http://localhost:8000/api/v1/linkedin/insights/1/markdown"
+```
+
+### List All LinkedIn Insights
+
+```bash
+curl "http://localhost:8000/api/v1/linkedin/insights/list"
 ```
 
 ### Research a Company
@@ -489,7 +601,11 @@ curl -X POST "http://localhost:8000/api/v1/meeting/create" \
 ### Get Meeting Details
 
 ```bash
+# Get complete meeting data with participants and talking points
 curl "http://localhost:8000/api/v1/meeting/{meeting_id}"
+
+# Get meeting metadata only (without participants)
+curl "http://localhost:8000/api/v1/meeting/{meeting_id}/metadata"
 ```
 
 ### List All Meetings
@@ -517,144 +633,3 @@ python tests/test_functions_directly.py
 ```bash
 python tests/test_comprehensive_data.py
 ```
-
-### Test Company Research
-
-```bash
-python tests/test_company_research.py
-```
-
-### Test Company Summary
-
-```bash
-python tests/test_company_summary.py
-```
-
-## Data Storage
-
-### LinkedIn CSV File (`data/user_profiles.csv`)
-Stores user information with the following columns:
-- `user_id`: Auto-incrementing integer ID
-- `name`: User's name
-- `company`: User's company
-- `linkedin_url`: LinkedIn profile URL
-- `created_date`: When the entry was created
-- `last_updated`: When the entry was last updated
-
-### LinkedIn Profile Data (`data/lin_profiles/{user_id}/`)
-Each user gets a directory containing:
-- `profile.md`: Profile data in comprehensive markdown format
-- `profile.json`: Raw profile data in JSON format
-
-### Company CSV File (`data/company_profiles.csv`)
-Stores company information with the following columns:
-- `company_id`: UUID-based company identifier
-- `company_website`: Company website URL
-- `create_date`: When the entry was created
-- `last_updated`: When the entry was last updated
-
-### Company Research Data (`data/company_info/{company_id}/`)
-Each company gets a directory containing:
-- `research_data.md`: Company research data in markdown format
-- `research_data.json`: Raw research data in JSON format
-- `summary.md`: Generated company summary in markdown format
-- `summary.json`: Generated company summary in JSON format
-
-### Meeting CSV File (`data/meetings/`)
-Stores meeting information with the following columns:
-- `meeting_id`: UUID-based meeting identifier
-- `meeting_title`: Meeting title
-- `meeting_date`: Meeting date
-- `created_date`: When the entry was created
-- `last_updated`: When the entry was last updated
-
-### Meeting Data (`data/meetings/{meeting_id}/`)
-Each meeting gets a directory containing:
-- `participants.md`: Participant data in markdown format
-- `participants.json`: Raw participant data in JSON format
-- `talking_points.md`: AI-generated talking points in markdown format
-- `talking_points.json`: Raw talking points in JSON format
-
-## Pipeline Flow
-
-### LinkedIn Profile Pipeline
-1. **Input**: LinkedIn URL via POST request
-2. **Scraping**: Apify actor scrapes the LinkedIn profile
-3. **Data Processing**: Extracts comprehensive information from all available fields
-4. **Storage**: 
-   - Updates/creates entry in CSV file
-   - Saves profile data in markdown and JSON formats
-5. **Response**: Returns user information, status, and profile summary
-
-### Company Research Pipeline
-1. **Input**: Company website URL and optional company name via POST request
-2. **Research**: Tavily API researches the company website and related information
-3. **Data Processing**: Extracts company name and organizes research data
-4. **Storage**: 
-   - Creates entry in company CSV file with UUID
-   - Saves research data in markdown and JSON formats
-5. **Response**: Returns company information, status, and research metadata
-
-### Company Summary Pipeline
-1. **Input**: Company ID or website URL and optional user prompt via POST request
-2. **Data Retrieval**: Loads existing company research data
-3. **Summary Generation**: Analyzes research data and extracts key information
-4. **User Prompt Processing**: Applies user prompt to focus summary on specific aspects
-5. **Storage**: 
-   - Saves summary data in markdown and JSON formats
-   - Stores in company-specific directory
-6. **Response**: Returns summary data and metadata
-
-### Meeting Preparation Pipeline
-1. **Input**: Meeting title, date, and participant information via POST request
-2. **Participant Processing**: 
-   - Enriches participant data with LinkedIn profile information using user_id (preferred) or linkedin_url
-   - Incorporates company research data using company_id (preferred) or company name
-   - Combines user-provided and LinkedIn background information
-3. **Talking Points Generation**: 
-   - Analyzes each participant's objectives, offerings, and needs
-   - Generates personalized talking points for each participant
-   - Uses AI to identify mutual value and collaboration opportunities
-4. **Data Storage**: 
-   - Creates entry in meeting CSV file with UUID
-   - Saves comprehensive meeting data in JSON and markdown formats
-5. **Response**: Returns meeting ID, status, and participant count
-
-## Error Handling
-
-- Comprehensive error handling throughout the application
-- Detailed logging for debugging
-- Graceful handling of API failures
-- Input validation using Pydantic models
-- Fallback mechanisms for missing data fields
-- Company name extraction from multiple sources
-- User prompt validation and processing
-
-## Future Enhancements
-
-- S3 integration for cloud storage
-- Additional data sources beyond LinkedIn and company websites
-- Meeting preparation insights generation
-- User authentication and authorization
-- Rate limiting and API quotas
-- Data analytics and reporting
-- Export functionality (PDF, Word, etc.)
-- Integration with CRM systems
-- Automated meeting agenda generation
-- Competitor analysis features
-- Advanced AI summarization with multiple models
-- Real-time news integration
-- Financial data API integration
-- Custom summary templates
-- Batch processing capabilities
-
-## Contributing
-
-1. Follow the existing code structure
-2. Add appropriate logging
-3. Include tests for new functionality
-4. Update documentation as needed
-
-## License
-
-This project is for internal use and meeting preparation purposes.

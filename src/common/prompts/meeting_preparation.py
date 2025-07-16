@@ -20,6 +20,10 @@ Key considerations:
 - Industry-specific opportunities and trends
 - Problem-solving and solution-finding approaches
 
+Gaurdrails
+- Do not make up any information about the participants.
+- Do not make up any particpants names or background
+
 Return your response as a JSON object where each key is a participant name and the value is a list of specific talking points for that participant."""
 
 def get_meeting_talking_points_user_prompt(participant: Dict[str, Any], all_participants: List[Dict[str, Any]]) -> str:
